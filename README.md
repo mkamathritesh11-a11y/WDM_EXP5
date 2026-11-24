@@ -1,5 +1,7 @@
 ### EX5 Information Retrieval Using Boolean Model in Python
-### DATE: 
+### NAME: RITESH M KAMATH
+### REG NO:212225230228
+### DATE: 24 NOVEMBER 2026
 ### AIM: To implement Information Retrieval Using Boolean Model in Python.
 ### Description:
 <div align = "justify">
@@ -24,11 +26,12 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
 ### Program:
 
     import numpy as np
-    import pandas as pd
-    class BooleanRetrieval:
-        def __init__(self):
-            self.index = {}
-            self.documents_matrix = None
+import pandas as pd
+
+class BooleanRetrieval:
+    def __init__(self):
+        self.index = {}
+        self.documents_matrix = None
 
     def index_document(self, doc_id, text):
         terms = text.lower().split()
@@ -62,9 +65,38 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
         print(list(self.index.keys()))
 
     def boolean_search(self, query):
-        # TYPE YOUR CODE HERE
+        tokens = query.lower().split()
+        all_docs = set()
+        for ids in self.index.values():
+            all_docs |= ids
+
+        results = None
+        operator = None
+        negate = False
+
+        for token in tokens:
+            if token in ("and", "or"):
+                operator = token
+            elif token == "not":
+                negate = True
+            else:
+                doc_ids = self.index.get(token, set())
+                if negate:
+                    doc_ids = all_docs - doc_ids      # NOT term
+                    negate = False
+
+                if results is None:
+                    results = doc_ids.copy()
+                elif operator == "or":
+                    results = results | doc_ids
+                else:                                  # "and" (or no operator)
+                    results = results & doc_ids
+                operator = None
+
+        return sorted(results) if results else []
 
 if __name__ == "__main__":
+
     indexer = BooleanRetrieval()
 
     documents = {
@@ -78,16 +110,24 @@ if __name__ == "__main__":
 
     indexer.create_documents_matrix(documents)
     indexer.print_documents_matrix_table()
+
     indexer.print_all_terms()
 
-    query = input("Enter your boolean query: ")
-    results = indexer.boolean_search(query)
+    query1 = input("Enter your boolean query: ")
+    results = indexer.boolean_search(query1)
     if results:
-        print(f"Results for '{query}': {results}")
+        print(f"Results for '{query1}': {results}")
     else:
         print("No results found for the query.")
 
-
 ### Output:
+<img width="1219" height="321" alt="image" src="https://github.com/user-attachments/assets/fb228871-7c02-4c81-8d7e-7a944265fc8a" />
+
+<img width="514" height="47" alt="image" src="https://github.com/user-attachments/assets/0cfe69b1-bb67-4b9c-8a6d-90ac665ab6a4" />
+
+<img width="482" height="50" alt="image" src="https://github.com/user-attachments/assets/4b1a909c-7082-47f4-a20c-ea2adae8841d" />
+
+<img width="487" height="49" alt="image" src="https://github.com/user-attachments/assets/4df65acb-9de4-4fa9-9f34-63f8191a8dc2" />
 
 ### Result:
+Hence the python program has been executed, and all the outputs have been verified successfully.
